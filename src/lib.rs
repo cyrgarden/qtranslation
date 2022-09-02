@@ -35,7 +35,7 @@ impl QTranslater {
         let data: String;
         match read_to_string(&self.json_path) {
             Ok(v) => data = v,
-            Err(_err) => data = read_to_string(&self.json_path).expect("can't find english dict"),
+            Err(_err) => data = read_to_string("./src/lang/en_GB.json").expect("can't find english dict"),
         }
 
         //let data = read_to_string(&self.json_path).expect("file not found"); //Charge json data from a string
