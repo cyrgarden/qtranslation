@@ -3,7 +3,7 @@ This crate is a very small translation system based on Json for QMetaOjbect.
 It was originally created for the translation of the [Grace software](https://gitlab.cairn-devices.eu/cairntech/grace)(by Cairn Devices).
 
 
-## Objectiv
+## Goal
 Allow simple translation of variables for interfaces that use the [qmetaobject](https://github.com/woboq/qmetaobject-rs) crate.
 
 ## Setup
