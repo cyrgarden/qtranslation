@@ -7,9 +7,27 @@ Permettre de traduire simplement des variables pour les interfaces qui utilisent
 
 ## Mise en place 
 
+
+### In your folder project 
+Create in a "lang" folder in your src folder.
+In this "lang" folder create a json file for every languages you want to switch to.
+![Screenshot](./screenshot.png)
+
+### In a Json file
+For example in "fr_FR.json"
+```json
+{
+    "water": "eau",
+    "battery": "Batterie",
+    "trains":"age",
+    "global_infos": "Informations générales", 
+}
+```
+
+### In your rust file
 ```rust
-    //For example, it's in my main.rs
-    //We start with import*
+//For example: in my main.rs
+//We start with import*
 use qmetaobject::prelude::*; 
 use qtranslation::QTranslater;
 
@@ -26,16 +44,49 @@ use qtranslation::QTranslater;
     }
     
 ```
-
+### In your QML file
 ```qml
-    property var global_opacity : 0.90
+//Import the QTranslater object
+import QTranslater 1.0
 
-    property var global_bg: "#f0f0f0"
-   
-    property var global_bg1: "#ACD9E6"
-    property var global_bg2: "#D8F1E9"
+ApplicationWindow{
+    id:my_window
+    visible:true
+    width : 800
+    height:800
 
-    property var title_color: "#000000"
+    QTranslater{
+        id: lang //Assign an ID you want
+        Component.onCompleted: {
+            init();
+        }
+    }
+    //Some code...
+    ColumnLayout{
+        Text{
+            text: lang.dict["global_informations"]
+        }
+        Text{
+            text: lang.dict["water"]
+        }
+        Text{
+            text: lang.dict["battery"] + ": 23
+            font.bold: true
+        }
+
+        Text{
+            textFormat: Text.RichText
+            text: "<html> <span style='font-weight: bold '>I love</span>" + "<span>" +lang.dict.["trains"] + +"<span><\html>"
+            color: ""
+            font.family: ubuntu_regular.name
+        }
+        
+        Button{
+            text: "Change to French"
+            onClicked: lang.change_lang("fr_FR") // To change language
+        }
+    } 
+}
 
 
 ```
