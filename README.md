@@ -3,14 +3,14 @@ This crate is a very small translation system based on Json for QMetaOjbect.
 It was originally created for the translation of the [Grace software](https://gitlab.cairn-devices.eu/cairntech/grace)(by Cairn Devices).
 
 
-## Objectiv
+## Goal
 Allow simple translation of variables for interfaces that use the [qmetaobject](https://github.com/woboq/qmetaobject-rs) crate.
 
 ## Setup
 
 
 ### In your folder project 
-Create in a "lang" folder in your src folder. In this "lang" folder create a json file for every languages you want to switch to. <br><br>
+Create a "lang" folder in your "src" folder. In this "lang" folder create a json file for every languages you want to switch to. <br><br>
 ![Screenshot](./screenshot.png)
 
 ### In a Json file
