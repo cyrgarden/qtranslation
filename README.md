@@ -3,13 +3,14 @@ This crate is a very small translation system based on Json for QMetaOjbect.
 It was originally created for the translation of the [Grace software](https://gitlab.cairn-devices.eu/cairntech/grace)(by Cairn Devices).
 
 
-## Objectif : 
-Allow simple translation of variables for interfaces that use the [qmetaobject crate](https://github.com/woboq/qmetaobject-rs)
-## Mise en place 
+## Objectiv
+Allow simple translation of variables for interfaces that use the [qmetaobject](https://github.com/woboq/qmetaobject-rs) crate.
+
+## Setup
 
 
 ### In your folder project 
-Create in a "lang" folder in your src folder. In this "lang" folder create a json file for every languages you want to switch to.
+Create in a "lang" folder in your src folder. In this "lang" folder create a json file for every languages you want to switch to. <br><br>
 ![Screenshot](./screenshot.png)
 
 ### In a Json file
@@ -24,6 +25,10 @@ For example in "fr_FR.json"
 ```
 
 ### In your rust file
+By default, the library will determine the language of your computer using ["sys-local::get_local"](https://crates.io/crates/sys-locale).
+If the language is not present in the "lang" folder, it will automatically load an "en_GB.json".
+So please provide an "en_GB.json" file to avoid any crash of your application.
+
 ```rust
 //For example: in my main.rs
 //We start with import*
