@@ -19,23 +19,27 @@ pub struct QTranslater {
 
     json_path: String, // relative path to the Json file
     lang: String,      // current language --> Default : your computer language
+    qlang: qt_property!(QString; NOTIFY qlang_changed),
 
     init: qt_method!(fn(&mut self)),         // Constructor method
     refresh_dict: qt_method!(fn(&mut self)), //to refresh datas
     change_lang: qt_method!(fn(&mut self, new_lang: QString)), // Methode to switch to change language
 
     dict_changed: qt_signal!(), //just a qt_signal() that is triggered when modifications are done so the changes are displayed
+    qlang_changed: qt_signal!(),
 }
 
 impl QTranslater {
     pub fn init(&mut self) {
         self.lang = get_locale().unwrap_or_else(|| String::from("en-US")); //Get your computer lang
         self.json_path = "./src/lang/".to_string() + self.lang.borrow() + ".json";
+        let mut qlang = self.lang.clone();
 
         let data: String;
         match read_to_string(&self.json_path) {
             Ok(v) => data = v,
-            Err(_err) => data = read_to_string("./src/lang/en_GB.json").expect("can't find english dict"),
+            Err(_err) => {data = read_to_string("./src/lang/en_GB.json").expect("can't find english dict");
+            qlang = "en_GB".to_string()},
         }
 
         //let data = read_to_string(&self.json_path).expect("file not found"); //Charge json data from a string
@@ -56,10 +60,14 @@ impl QTranslater {
 
         self.dict = map.into(); // We convert the dict HashMap into a QJsonObject , which is Q-compatible
         self.dict_changed(); //Trigger the signal, so the interface can display changes
+
+        self.qlang = qlang.clone().into();
+        self.qlang_changed();
     }
 
     //Works the same way as the init(). Exception is that this one takes an arg which correspond to the lang you want to switch to
     fn change_lang(&mut self, new_lang: QString) {
+        let qlang = new_lang.clone();
         self.lang = new_lang.to_string();
         self.json_path = "./src/lang/".to_string() + self.lang.borrow() + ".json";
         let data = read_to_string(&self.json_path).expect("file not found");
@@ -81,6 +89,8 @@ impl QTranslater {
 
         self.dict = map.into();
         self.dict_changed();
+        self.qlang = qlang.clone();
+        self.qlang_changed();
     }
 
     fn refresh_dict(&mut self) {
