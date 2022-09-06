@@ -38,8 +38,10 @@ impl QTranslater {
         let data: String;
         match read_to_string(&self.json_path) {
             Ok(v) => data = v,
-            Err(_err) => {data = read_to_string("./src/lang/en_GB.json").expect("can't find english dict");
-            qlang = "en_GB".to_string()},
+            Err(_err) => {
+                data = read_to_string("./src/lang/en_GB.json").expect("can't find english dict");
+                qlang = "en_GB".to_string()
+            }
         }
 
         //let data = read_to_string(&self.json_path).expect("file not found"); //Charge json data from a string
@@ -61,7 +63,7 @@ impl QTranslater {
         self.dict = map.into(); // We convert the dict HashMap into a QJsonObject , which is Q-compatible
         self.dict_changed(); //Trigger the signal, so the interface can display changes
 
-        self.qlang = qlang.clone().into();
+        self.qlang = qlang.into();
         self.qlang_changed();
     }
 
@@ -89,7 +91,7 @@ impl QTranslater {
 
         self.dict = map.into();
         self.dict_changed();
-        self.qlang = qlang.clone();
+        self.qlang = qlang;
         self.qlang_changed();
     }
 
