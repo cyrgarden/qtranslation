@@ -54,7 +54,7 @@ There are three options :
 <ol>
     <li>folder_path = "dev_path" --> in this case the path will be ./src/lang/ </li>
     <li>folder_path = "installed_path" --> in this case the path will be /home/{username}/.local/share/cairn-grace/lang/ </li>
-    <li>Else, if folder_path is an other path that you choose. For example : "/home/username/Desktop/random_folder/" --> the </li>
+    <li>Else, if folder_path is an other path that you choose. For example : "/home/username/Desktop/random_folder/" --> in this cas the path will be equals to folder_path </li>
 </ol>
 
 ```qml
