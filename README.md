@@ -49,6 +49,14 @@ use qtranslation::QTranslater;
     
 ```
 ### In your QML file
+QTranslater init() function takes one argument "folder_path" a String. This argument determines the file in which the Qtranslater will look for json files.
+There are three options : 
+<ol>
+    <li>folder_path = "dev_path" --> in this case the path will be ./src/lang/ </li>
+    <li>folder_path = "installed_path" --> in this case the path will be /home/{username}/.local/share/cairn-grace/lang/ </li>
+    <li>Else, if folder_path is an other path that you choose. For example : "/home/username/Desktop/random_folder/" --> the </li>
+</ol>
+
 ```qml
 //Import the QTranslater object
 import QTranslater 1.0
@@ -62,7 +70,9 @@ ApplicationWindow{
     QTranslater{
         id: lang //Assign an ID you want
         Component.onCompleted: {
-            init();
+            init(installed_path); // it can be "dev_path" or a custom path like the one in the example below
+            //init(dev_path);
+            //init("/home/username/Desktop/random_folder/")
         }
     }
     //Some code...
@@ -80,8 +90,8 @@ ApplicationWindow{
 
         Text{
             textFormat: Text.RichText
-            text: "<html> <span style='font-weight: bold '>I love</span><span>" +lang.dict.["trains"] + +"</span><\html>"
-            color: ""
+            text: "<html><span style='font-weight: bold '>I love</span><span>" +lang.dict.["trains"] +"</span><\html>"
+            color: "red"
             font.family: ubuntu_regular.name
         }
         
