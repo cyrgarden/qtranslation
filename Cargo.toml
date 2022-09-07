@@ -1,6 +1,6 @@
 [package]
 name = "qtranslation"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 description = "A minimalist translation system based on json for qmetaobject"
 license ="AGPL-3.0-only"
