@@ -34,21 +34,15 @@ impl QTranslater {
         self.lang = get_locale().unwrap_or_else(|| String::from("en-US")); //Get your computer lang
 
         if folder_path == "dev_path" {
-            self.json_path = "./src/lang/".to_string() + &self.lang + ".json";
+            self.json_path = "./src/lang/".to_string();
         } else if folder_path == "installed_path" {
             match env::var("SUDO_USER") {
                 Ok(v) => {
-                    self.json_path = "/home/".to_string()
-                        + &v
-                        + "/.local/share/cairn-grace/lang/"
-                        + &self.lang
-                        + ".json"
+                    self.json_path = "/home/".to_string() + &v + "/.local/share/cairn-grace/lang/"
                 }
                 Err(_) => {
                     self.json_path = (env::var("HOME").expect("cannot reach home"))
                         + "/.local/share/cairn-grace/lang/"
-                        + &self.lang
-                        + ".json"
                 }
             }
         } else {
@@ -57,11 +51,13 @@ impl QTranslater {
 
         let mut qlang = self.lang.clone();
 
+        let temp_path = &self.json_path.clone();
         let data: String;
-        match read_to_string(&self.json_path) {
+        match read_to_string(temp_path.to_owned() + &self.lang.to_string() + ".json") {
             Ok(v) => data = v,
             Err(_err) => {
-                data = read_to_string("./src/lang/en_GB.json").expect("can't find english dict");
+                data = read_to_string(self.json_path.to_string() + "en_GB.json")
+                    .expect("can't find english dict");
                 self.lang = "en_GB".to_string();
                 qlang = "en_GB".to_string()
             }
@@ -94,7 +90,8 @@ impl QTranslater {
     fn change_lang(&mut self, new_lang: QString) {
         let qlang = new_lang.clone();
         self.lang = new_lang.to_string();
-        let data = read_to_string(&self.json_path).expect("file not found");
+        let data = read_to_string(self.json_path.to_string() + &self.lang + ".json")
+            .expect("file not found");
 
         let mut lookup: HashMap<String, Value> = serde_json::from_str(&data).unwrap();
         let mut keys: Vec<String> = Vec::new();
