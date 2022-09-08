@@ -99,7 +99,7 @@ impl QTranslater {
             self.json_path = "./src/lang/".to_string();
         } else if folder_path == "installed_path" {
             self.json_path = match env::var("LOCALAPPDATA") {
-                Ok(v) => v + "/cairn-grace/lang/links_",
+                Ok(v) => v + "/cairn-grace/lang/",
                 Err(_) => " ".to_string(),
             };
         } else {
