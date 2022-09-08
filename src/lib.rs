@@ -33,21 +33,11 @@ impl QTranslater {
     pub fn init(&mut self, folder_path: String) {
         self.lang = get_locale().unwrap_or_else(|| String::from("en-US")); //Get your computer lang
 
-        if folder_path == "dev_path" {
-            self.json_path = "./src/lang/".to_string();
-        } else if folder_path == "installed_path" {
-            match env::var("SUDO_USER") {
-                Ok(v) => {
-                    self.json_path = "/home/".to_string() + &v + "/.local/share/cairn-grace/lang/"
-                }
-                Err(_) => {
-                    self.json_path = (env::var("HOME").expect("cannot reach home"))
-                        + "/.local/share/cairn-grace/lang/"
-                }
-            }
-        } else {
-            self.json_path = folder_path + &self.lang + ".json";
-        };
+        if cfg!(unix) {
+            self.set_linux_path(folder_path)
+        } else if cfg!(windows) {
+            self.set_windows_path(folder_path)
+        }
 
         let mut qlang = self.lang.clone();
 
@@ -84,6 +74,37 @@ impl QTranslater {
 
         self.qlang = qlang.into();
         self.qlang_changed();
+    }
+
+    fn set_linux_path(&mut self, folder_path: String) {
+        if folder_path == "dev_path" {
+            self.json_path = "./src/lang/".to_string();
+        } else if folder_path == "installed_path" {
+            match env::var("SUDO_USER") {
+                Ok(v) => {
+                    self.json_path = "/home/".to_string() + &v + "/.local/share/cairn-grace/lang/"
+                }
+                Err(_) => {
+                    self.json_path = (env::var("HOME").expect("cannot reach home"))
+                        + "/.local/share/cairn-grace/lang/"
+                }
+            }
+        } else {
+            self.json_path = folder_path + &self.lang + ".json";
+        };
+    }
+
+    fn set_windows_path(&mut self, folder_path: String) {
+        if folder_path == "dev_path" {
+            self.json_path = "./src/lang/".to_string();
+        } else if folder_path == "installed_path" {
+            self.json_path = match env::var("LOCALAPPDATA") {
+                Ok(v) => v + "/cairn-grace/lang/links_",
+                Err(_) => " ".to_string(),
+            };
+        } else {
+            self.json_path = folder_path + &self.lang + ".json";
+        };
     }
 
     //Works the same way as the init(). Exception is that this one takes an arg which correspond to the lang you want to switch to
